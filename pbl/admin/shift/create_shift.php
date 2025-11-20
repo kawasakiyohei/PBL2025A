@@ -4,7 +4,7 @@ session_start(); // セッションを開始
 ini_set('display_errors', "On");
 $name = $_SESSION['name'];
 $position = $_SESSION['position'];
-$department = $_SESSION['department'];
+$department_label = $_SESSION['department_label'] ?? ($_SESSION['department'] ?? '');
 
 // セッションに'position'が保存されているかを確認
 if (isset($_SESSION['position']) && $_SESSION['position'] === 'admin') {

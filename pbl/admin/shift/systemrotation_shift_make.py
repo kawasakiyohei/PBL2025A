@@ -177,7 +177,7 @@ import csv
 
 # 引数を取得
 filename = sys.argv[1]
-# filename = 'degitalstreaming_desired_vacation_pre.csv'
+# filename = 'digitalstreaming_desired_vacation_pre.csv'
 desired_vacation = []
 # ファイルの内容を出力
 with open(filename, "r") as f:

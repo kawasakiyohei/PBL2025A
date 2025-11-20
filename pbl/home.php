@@ -3,7 +3,8 @@
     ini_set('display_errors', "On");
     $name = $_SESSION['name'];
     $position = $_SESSION['position'];
-    $department = $_SESSION['department']
+    // 表示用ラベルを利用（セッションには英語キーと表示ラベルの両方が入る想定）
+    $department_label = $_SESSION['department_label'] ?? ($_SESSION['department'] ?? '');
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -37,8 +38,8 @@
     <div class="header">
         <h1>愛媛新聞社 シフト管理システム</h1>
     </div>
-    <div class="logout">
-        <span><?php echo $department;?>部 <?php echo $name;?> さん</span>
+        <div class="logout">
+        <span><?php echo htmlspecialchars($department_label);?>部 <?php echo $name;?> さん</span>
         <button onclick="location.href='./admin/account/logout.php'">ログアウト</button>
     </div>  
 
@@ -97,7 +98,7 @@
         </div>
         <?php if ($position === 'admin'): ?>
             <div class="admin">
-                <button onclick="location.href='./admin/shift/create_shift.php'">シフト作成</button>
+                <button onclick="location.href='./admin/shift/create_schedule.php'">シフト作成</button>
                 <button onclick="location.href='./info.php'">お知らせ編集</button>
                 <button onclick="location.href='./admin/account/account_search_page.php'">アカウント管理</button>
             </div>

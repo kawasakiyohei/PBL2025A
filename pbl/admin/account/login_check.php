@@ -48,7 +48,37 @@
             $_SESSION['employeenumber'] = $employeenumber;
             $_SESSION['name'] = $rec['name'];
             $_SESSION['position'] = $rec['position'];
-            $_SESSION['department'] = $rec['department'];
+
+            // 部署の英語キーと表示ラベルのマッピング
+            // 内部では英語キーを使い、表示用にはラベルを保持する
+            $department_map = [
+                'digitalstreaming' => 'デジタル報道部配信班',
+                'systemrotation' => 'システム部ローテ業務',
+                'renewspaper' => '新聞編集部整理班',
+            ];
+
+            $raw_dept = $rec['department']; // DB に入っている値（英語キーか日本語ラベル）
+
+            // もし DB に英語キーがそのまま入っていればそれを使う
+            if (array_key_exists($raw_dept, $department_map)) {
+                $department_en = $raw_dept;
+                $department_label = $department_map[$department_en];
+            } else {
+                // 日本語ラベルが入っている場合は逆引きして英語キーを得る
+                $department_en = array_search($raw_dept, $department_map, true);
+                if ($department_en === false) {
+                    // 未知の部署名なら安全側のデフォルト (digitalstreaming)
+                    $department_en = 'digitalstreaming';
+                    // 部署ラベルは元の値を保持する（将来的にマップに追加することを推奨）
+                    $department_label = $raw_dept;
+                } else {
+                    $department_label = $raw_dept;
+                }
+            }
+
+            // セッションには英語キーと表示ラベルの両方を入れておく
+            $_SESSION['department'] = $department_en;
+            $_SESSION['department_label'] = $department_label;
             header('Location:/pbl/home.php');
             exit();
         }

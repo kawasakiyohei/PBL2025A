@@ -3,7 +3,9 @@ session_start();
 ini_set('display_errors', "On");
 $name = $_SESSION['name'];
 $position = $_SESSION['position'];
-$department = $_SESSION['department'];
+// セッションは英語キーを保持（内部処理用）。表示用ラベルもセッションにある想定
+$department_session = $_SESSION['department'] ?? '';
+$department_label = $_SESSION['department_label'] ?? $department_session;
 
 
 ?>
@@ -35,36 +37,43 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (!empty($_POST["department"]) && !empty($_POST["year"]) && !empty($_POST["month"])) {
         $year = $_POST['year'];
         $month = $_POST['month'];
-        $department = $_POST['department'];
+        // フォームから来た値優先。なければセッションの部署を使う
+        $department = $_POST['department'] ?: $department_session;
         $department_en = '';
+
+        // フォームは日本語ラベルを送る場合があるので両方に対応
         switch ($department) {
             case "デジタル報道部配信班":
+            case "digitalstreaming":
                 $department_en = "digitalstreaming";
                 break;
             case "システム部ローテ業務":
+            case "systemrotation":
                 $department_en = "systemrotation";
                 break;
             case "新聞編集部整理班":
+            case "renewspaper":
                 $department_en = "renewspaper";
                 break;
+            default:
+                die("無効な部署です。");
         }
 
         $file = './admin/data/req_' . $year . '_' . $month . '_' . $department_en . '.csv';
 
         $cmd = "";
 
-        switch ($department) {
-            case "デジタル報道部配信班":
-                $cmd = escapeshellarg(__DIR__ . '/../../myenv/Scripts/python.exe') . ' ' . escapeshellarg(__DIR__ . '/degitalstreaming_shift_make.py') . ' ' . escapeshellarg($file) . ' ' . escapeshellarg($_POST['year']) . ' ' . escapeshellarg($_POST['month']) . ' 2>&1';
+        // 実行スクリプトは英語キーを使って選択する
+        switch ($department_en) {
+            case "digitalstreaming":
+                $cmd = escapeshellarg(__DIR__ . '/../../myenv/Scripts/python.exe') . ' ' . escapeshellarg(__DIR__ . '/digitalstreaming_shift_make.py') . ' ' . escapeshellarg($file) . ' ' . escapeshellarg($year) . ' ' . escapeshellarg($month) . ' 2>&1';
                 break;
-            case "システム部ローテ業務":
-                $cmd = escapeshellarg(__DIR__ . '/../../myenv/Scripts/python.exe') . ' ' . escapeshellarg(__DIR__ . '/systemrotation_shift_make.py') . ' ' . escapeshellarg($file) . ' ' . escapeshellarg($_POST['year']) . ' ' . escapeshellarg($_POST['month']) . ' 2>&1';
+            case "systemrotation":
+                $cmd = escapeshellarg(__DIR__ . '/../../myenv/Scripts/python.exe') . ' ' . escapeshellarg(__DIR__ . '/systemrotation_shift_make.py') . ' ' . escapeshellarg($file) . ' ' . escapeshellarg($year) . ' ' . escapeshellarg($month) . ' 2>&1';
                 break;
-            case "新聞編集部整理班":
-                $cmd = escapeshellarg(__DIR__ . '/../../myenv/Scripts/python.exe') . ' ' . escapeshellarg(__DIR__ . '/renewspaper_editing.py') . ' ' . escapeshellarg($file) . ' ' . escapeshellarg($_POST['year']) . ' ' . escapeshellarg($_POST['month']) . ' 2>&1';
+            case "renewspaper":
+                $cmd = escapeshellarg(__DIR__ . '/../../myenv/Scripts/python.exe') . ' ' . escapeshellarg(__DIR__ . '/renewspaper_editing.py') . ' ' . escapeshellarg($file) . ' ' . escapeshellarg($year) . ' ' . escapeshellarg($month) . ' 2>&1';
                 break;
-            default:
-                die("無効な部署です。");
         }
 
         exec($cmd, $output, $return_ver);

@@ -16,8 +16,8 @@ if (isset($_SESSION['position']) && $_SESSION['position'] === 'admin') {
 <?php
 // データベース接続情報
 $host = 'localhost';   // データベースホスト
-$dbname = 'j292toku1'; // データベース名
-$username = 'j292toku';    // MySQLのユーザー名（デフォルトの場合）
+$dbname = 'pbl'; // データベース名
+$username = 'root';    // MySQLのユーザー名（デフォルトの場合）
 $dbpassword = '';        // MySQLのパスワード（デフォルトの場合は空）
 
 // フォームから送信されたデータを取得

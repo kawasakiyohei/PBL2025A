@@ -10,7 +10,8 @@ if (!isset($_SESSION['name'])) {
 
 // ログインユーザーの情報を取得
 $name = $_SESSION['name'];
-$department = $_SESSION['department'];
+// 表示用部署ラベル
+$department_label = $_SESSION['department_label'] ?? ($_SESSION['department'] ?? '');
 ?>
 
 <!DOCTYPE html>
@@ -96,7 +97,7 @@ $department = $_SESSION['department'];
 </div>
 <button>設定</button>
 <div class="logout">
-    <span><?php echo $department; ?>部 <?php echo $name; ?> さん</span>
+    <span><?php echo htmlspecialchars($department_label); ?>部 <?php echo $name; ?> さん</span>
     <button onclick="location.href='./admin/account/logout.php'">ログアウト</button>
 </div>
 

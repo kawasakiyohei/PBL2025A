@@ -1,0 +1,20 @@
+# Ignore Python virtual environment
+myenv/
+
+# Ignore data CSVs and download folders
+admin/data/*.csv
+admin/data/dl/
+
+# Ignore runtime status/log files
+admin/shift/searchstatus.txt
+admin/shift/searchpath.txt
+admin/shift/*.log
+
+# Ignore uploaded files and other runtime folders
+uploads/
+archive/
+
+# IDE / OS files
+.vscode/
+.DS_Store
+Thumbs.db
