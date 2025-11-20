@@ -25,6 +25,8 @@ $name = $_POST['name'];
 $employeenumber = $_POST['employeenumber'];
 $password = $_POST['password'];
 $position = $_POST['position'];
+$job_title = $_POST['job_title'];   // 🌟 【新規】具体的な役職 (17個分)
+$email = $_POST['email'];           // メールアドレス
 
 // パスワードをハッシュ化（セキュリティのため）
 $hashed_password = password_hash($password, PASSWORD_DEFAULT);
@@ -38,7 +40,7 @@ try {
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
     // SQL文の準備
-    $sql = "INSERT INTO members (name, employeenumber, password, position, created) VALUES (:name, :employeenumber, :password, :position, :created)";
+    $sql = "INSERT INTO members (name, employeenumber, password, position,job_title,email, created) VALUES (:name, :employeenumber, :password, :position,:job_title,:email, :created)";
     
     // SQLの実行
     $stmt = $pdo->prepare($sql);
@@ -46,6 +48,8 @@ try {
     $stmt->bindParam(':employeenumber', $employeenumber);
     $stmt->bindParam(':password', $hashed_password);
     $stmt->bindParam(':position', $position);
+    $stmt->bindParam(':job_title', $job_title);   // 🌟 具体的な役職をバインド
+    $stmt->bindParam(':email', $email);
     $stmt->bindParam(':created', $created);
     
     // 実行

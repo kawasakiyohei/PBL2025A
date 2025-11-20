@@ -55,7 +55,7 @@ if (isset($_SESSION['position']) && $_SESSION['position'] === 'admin') {
 <body>
 <div>
         <div class="header">
-            <a href="pbl/home.php"><h1>愛媛新聞社 シフト管理システム</h1></a>
+            <a href="/pbl/home.php"><h1>愛媛新聞社 シフト管理システム</h1></a>
     </div>
     <button>設定</button>
     <div class="logout">
